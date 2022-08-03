@@ -4,7 +4,9 @@ Provide an interface for downloading csv files containing medical data for the u
 
 ## Whos doing what:
 Ellie H: FTP Server
+
 Harry B1: GUIs
+
 Hannah M and Lucia A: Validation
 
 ## Validation Checklist
