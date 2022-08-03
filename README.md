@@ -2,7 +2,7 @@
 ## Project Outline
 Provide an interface for downloading csv files containing medical data for the university medical school. These files should be taken from an FTP server and screened for validity (a list of categories can be found below). The files should then be displayed on a user interface with both command line options and a user-friendly front end. 
 
-## Whos doing what:
+## Who's doing what:
 Ellie H: FTP Server
 
 Harry B1: GUIs
