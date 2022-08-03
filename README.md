@@ -1,13 +1,13 @@
 # CF_Group_Project
-=== Project Outline ===
+## Project Outline
 Provide an interface for 
 
-===Whos doing what:===
+## Whos doing what:
 Ellie H: FTP Server
 Harry B1: GUI
 Hannah M and Lucia A: Validation
 
-===Validation Checklist===
+## Validation Checklist
 * Duplicated Batch IDs
 * Missing/Misspelt Headers 
 * Missing Columns on a row
@@ -16,7 +16,7 @@ Hannah M and Lucia A: Validation
 * Incorrectly Formatted File Names
 * Malformed Files (format cannot be processed?)
 
-===File Format===
+## File Format
 Should have headings:
 * batch_id
 * timestamp
