@@ -7,7 +7,9 @@ Ellie H: FTP Server
 
 Harry B1: GUIs
 
-Hannah M and Lucia A: Validation
+Lucia A: Validation
+
+Hannah M: Report/Presentation
 
 ## Validation Checklist
 * Duplicated Batch IDs
