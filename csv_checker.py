@@ -1,3 +1,8 @@
+"""Module containing validation checks
+
+Functions: filename_check, parse_csv_data, check_empty_files, check_batch_ids, check_missing_entries, check_time_entry, check_headers,
+check_invalid_entries, total_valid
+"""
 
 import csv
 import re
@@ -42,7 +47,7 @@ def parse_csv_data(csv_filename: str) -> list:
         for row in csvreader:
             rows.append(row)
 
-    logging.info('csv file read succesfully')
+    logging.info('csv file read successfully')
 
     return rows
 
@@ -55,8 +60,9 @@ def check_empty_files(csv_content: str) -> bool:
     csv_filename (file.csv) : Title of csv file containing data
 
     Returns:
-    valid (boolean) : Returns true if non-empty and false if empty
+    valid (boolean) : Returns true if valid (non-empty) and false if empty
     """
+
 
     if csv_content == []:
         valid = False
@@ -159,7 +165,13 @@ def check_headers(csv_content: str) -> bool:
 
     valid = True
     good_headers = ['batch_id', 'timestamp', 'reading1', 'reading2', 'reading3', 'reading4', 'reading5', 'reading6', 'reading7', 'reading8', 'reading9', 'reading10']
-    header_list = csv_content[0]
+    try:
+        header_list = csv_content[0]
+    except:
+        # empty file shouldn't be processed
+        valid = False
+        header_list = []
+
     incorrect_headers = ""
 
     # check right length
@@ -223,3 +235,49 @@ def check_invalid_entries(csv_content: str) -> bool:
                 valid = False
 
     return valid
+
+
+# ====== Final validation ======
+
+def total_valid(csv_filename: str) -> bool:
+    """
+    Takes in csv file name and returns all checks for whether file is valid
+
+    Keyword arguments:
+    csv_filename (file.csv) : Title of csv file containing data
+
+    Returns:
+    valid (boolean) : Checks csv_file and returns if a valid file
+    """
+
+    valid = True
+    valid_filename = filename_check(csv_filename)
+
+    if valid_filename:
+        csv_data = parse_csv_data(csv_filename)
+        non_empty = check_empty_files(csv_data)
+
+        if non_empty:
+
+            valid_batch_ids = check_batch_ids(csv_data)
+            missing_entry = check_missing_entries(csv_data)
+            time_entry = check_time_entry(csv_data)
+            good_headers = check_headers(csv_data)
+            valid_entires = check_invalid_entries(csv_data)
+
+            valid_list = [valid_batch_ids,missing_entry,time_entry,good_headers,valid_entires]
+
+            if False in valid_list:
+                valid = False
+                logging.warning(f'Invalid file [{csv_filename}] so discarded')
+
+        else:
+            logging.warning(f'Invalid file [{csv_filename}] so discarded')
+            valid = False
+
+    else:
+        logging.warning(f'Invalid file [{csv_filename}] so discarded')
+        valid = False
+
+    return valid
+
