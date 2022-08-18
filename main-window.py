@@ -1,7 +1,8 @@
+from datetime import date
 from tkinter import *
 from tkinter import ttk
 
-from tkcalendar import DateEntry
+from tkcalendar import Calendar, DateEntry
 
 import ftplib
 ftp = ftplib.FTP()
@@ -92,7 +93,8 @@ def download_file():
 
 # Downloads all files that were created on a given date
 def download_files_from_date():
-    pass
+    # Put code here for downloading all files from a given date
+    print(download_date.get())
 
 # Closes FTP server connection
 def close_connection():
@@ -104,28 +106,45 @@ def close_connection():
 # ==================================
 
 
+# Downloading From Date ============
+# Creates a new window, prompting the user to enter a date to download the files from.
+def create_date_download_window():
+    date_download_window = Toplevel(window)
+    date_download_window.title("FTP Client - Download from Date")
+    
+    # Defining widgets
+    dent_download_date = DateEntry(date_download_window, width=12, bg="darkblue", fg="white", borderwidth=2, textvariable=download_date)
+    #clndr_download_date = Calendar(date_download_window)
+    btn_submit_date = Button(date_download_window, text="Download all files from Date", bg="#37c92c", command=download_files_from_date, padx=5, pady=5)
+
+    dent_download_date.grid(padx=10, pady=5)
+    #clndr_download_date.grid()
+    btn_submit_date.grid(padx=10, pady=10)
+# ==================================
+
+
 # Scheduling Methods ===============
 # Creates a new window with options for setting a scheduled task.
 def create_schedule_window():
     schedule = Toplevel(window)
     schedule.title("FTP Client - Scheduler")
-    schedule.geometry("300x200")
+    schedule.geometry("280x140")
 
     # Defining Widgets ============
     lbl_start_date = Label(schedule, text="Start Date")
-    dent_start_date = DateEntry(schedule, width=12, background="darkblue", foreground="white", borderwidth=2, textvariable=start_date)
+    dent_start_date = DateEntry(schedule, width=12, bg="darkblue", fg="white", borderwidth=2, textvariable=start_date)
 
     lbl_start_time = Label(schedule, text="Start Time")
     lbl_start_hour = Label(schedule, text="Hour")
     lbl_start_minute = Label(schedule, text="Min")
-    spn_schedule_start_hour = Spinbox(schedule, width=2, wrap=True, from_=0, to=23, textvariable=start_hour)
-    spn_schedule_start_minute = Spinbox(schedule, width=2, wrap=True, from_=0, to=59, textvariable=start_minute)
+    spn_schedule_start_hour = Spinbox(schedule, width=3, wrap=True, from_=0, to=23, textvariable=start_hour)
+    spn_schedule_start_minute = Spinbox(schedule, width=3, wrap=True, from_=0, to=59, textvariable=start_minute)
 
     lbl_repeat_delay = Label(schedule, text="Repeat Delay")
     cmb_repeat_delay = ttk.Combobox(schedule, values=["Daily", "Weekly", "Monthly"], width=8, textvariable=repeat_delay)
     cmb_repeat_delay.current(0) # Sets default value to "Daily"
 
-    btn_schedule_submit = Button(schedule, text="Submit", command=submit_schedule)
+    btn_schedule_submit = Button(schedule, text="Submit", command=submit_schedule, width=15, bg="#37c92c", padx=5, pady=5, anchor=CENTER)
     # =============================
     
 
@@ -133,8 +152,8 @@ def create_schedule_window():
     lbl_start_date.place(x=10, y=10)
     dent_start_date.place(x=10, y=30)
 
-    lbl_repeat_delay.place(x=120, y=130)
-    cmb_repeat_delay.place(x=200, y=130)
+    lbl_repeat_delay.place(x=115, y=60)
+    cmb_repeat_delay.place(x=195, y=60)
 
     lbl_start_time.place(x=120, y=10)
     lbl_start_hour.place(x=120, y=30)
@@ -142,7 +161,7 @@ def create_schedule_window():
     spn_schedule_start_hour.place(x=155, y=30)
     spn_schedule_start_minute.place(x=230, y=30)
 
-    btn_schedule_submit.place(x=240, y=160)
+    btn_schedule_submit.place(x=140, y=95)
     # =============================
 
 
@@ -166,6 +185,8 @@ start_hour = StringVar()
 start_minute = StringVar()
 repeat_type = StringVar()
 repeat_delay = StringVar()
+
+download_date = StringVar()
 # ==========================================
 
 # Connect
@@ -173,7 +194,7 @@ lbl_ip = Label(window, text="IP Address")
 ent_ip = Entry(window)
 lbl_port = Label(window, text="Port")
 ent_port = Entry(window)
-btn_connect = Button(window, text="Connect", command=connect_server)
+btn_connect = Button(window, text="Connect", command=connect_server, bg="#37c92c")
 
 # Server response text box
 text_servermsg = Text(window)
@@ -183,7 +204,7 @@ lbl_login = Label(window, text="Username")
 ent_login = Entry(window)
 lbl_pass = Label(window, text="Password")
 ent_pass = Entry(window)
-btn_login = Button(window, text="Login", command=login_server)
+btn_login = Button(window, text="Login", command=login_server, bg="#37c92c")
 
 # Directory listing
 lbl_dir = Label(window, text="Directory listing:")
@@ -195,9 +216,9 @@ ent_input = Entry(window)
 btn_chdir = Button(window, text="Change Directory", command=change_directory,width=15)
 btn_updir = Button(window, text="Step Up Directory", command=step_up_directory, width=15)
 btn_downfile = Button(window, text="Download File", command=download_file,width=15)
-btn_down_from_date = Button(window, text="Download Date", command=download_files_from_date, width=15)
+btn_down_from_date = Button(window, text="Download Date", command=create_date_download_window, width=15)
 btn_schedule = Button(window, text="Set Schedule", command=create_schedule_window, width=15)
-btn_quit = Button(window, text="Disconnect", command=close_connection,width=15)
+btn_quit = Button(window, text="Disconnect", command=close_connection, width=15, bg="#bd2626", fg="white")
 
 # Place widgets
 lbl_ip.place(x=20,y=20)
