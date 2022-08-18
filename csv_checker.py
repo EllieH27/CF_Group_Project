@@ -181,7 +181,7 @@ def check_headers(csv_content: str) -> bool:
     return valid
 
 
-def invalid_entries(csv_content: str) -> bool:
+def check_invalid_entries(csv_content: str) -> bool:
     """
     Takes in csv file name and returns whether entries are valid
     All 10 readings should be represented as floating point numbers formatted up to three decimal places
