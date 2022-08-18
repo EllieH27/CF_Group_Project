@@ -11,8 +11,8 @@ ftp = ftplib.FTP()
 # FTP commands =====================
 # Attempts to establish a connection to the ftp server with the given details
 def connect_server():
-    ip = "127.0.0.1"#ent_ip.get()
-    port = 21#int(ent_port.get())
+    ip = ent_ip.get()
+    port = int(ent_port.get())
     try:
        msg = ftp.connect(ip,port)
        text_servermsg.insert(END, "\n" + msg)
@@ -27,8 +27,8 @@ def connect_server():
 
 # Logs the user in with the given credentials
 def login_server():
-    user = "testUser"#ent_login.get()
-    password = "Pa$$w0rd"#ent_pass.get()
+    user = ent_login.get()
+    password = ent_pass.get()
     try:
         msg = ftp.login(user,password)
         text_servermsg.insert(END, "\n" + msg)
