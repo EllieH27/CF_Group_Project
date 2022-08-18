@@ -60,7 +60,7 @@ def check_empty_files(csv_content: str) -> bool:
 
     if csv_content == []:
         valid = False
-        logging.warning(f'File [{csv_filename}] is empty')
+        logging.warning(f'File is empty')
     else:
         valid = True
 
