@@ -1,1 +1,0 @@
-$ python3 -c 'import main-window; print main-window.updateAll()'
