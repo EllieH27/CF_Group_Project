@@ -47,16 +47,17 @@ def parse_csv_data(csv_filename: str) -> list:
         for row in csvreader:
             rows.append(row)
 
-    logging.info('csv file read successfully')
+    logging.info(f'csv file [{csv_filename}] read successfully')
 
     return rows
 
 
-def check_empty_files(csv_content: str) -> bool:
+def check_empty_files(csv_filename: str, csv_content: list) -> bool:
     """
     Takes in csv file name and returns whether file is empty
 
     Keyword arguments:
+    csv_content (list) : 2d array of csv file content
     csv_filename (file.csv) : Title of csv file containing data
 
     Returns:
@@ -66,18 +67,19 @@ def check_empty_files(csv_content: str) -> bool:
 
     if csv_content == []:
         valid = False
-        logging.warning(f'File is empty')
+        logging.warning(f'File [{csv_filename}] is empty')
     else:
         valid = True
 
     return valid
 
 
-def check_batch_ids(csv_content: str) -> bool:
+def check_batch_ids(csv_filename: str, csv_content: list) -> bool:
     """
     Takes in csv file name and returns whether batch IDs are vaild
 
     Keyword arguments:
+    csv_content (list) : 2d array of csv file content
     csv_filename (file.csv) : Title of csv file containing data
 
     Returns:
@@ -92,7 +94,7 @@ def check_batch_ids(csv_content: str) -> bool:
         b_id = csv_content[i][0]
         if b_id in collected_ids:
             valid = False
-            logging.warning(f'Batch ID [{b_id}] is invalid/repeated')
+            logging.warning(f'Batch ID [{b_id}] is invalid/repeated in [{csv_filename}]')
             break
         else:
             collected_ids.append(b_id)
@@ -100,11 +102,12 @@ def check_batch_ids(csv_content: str) -> bool:
     return valid
 
 
-def check_missing_entries(csv_content: str) -> bool:
+def check_missing_entries(csv_filename: str, csv_content: list) -> bool:
     """
     Takes in csv file name and checks for 12 columns and for 11 rows (including header row)
 
     Keyword arguments:
+    csv_content (list) : 2d array of csv file content
     csv_filename (file.csv) : Title of csv file containing data
 
     Returns:
@@ -116,22 +119,23 @@ def check_missing_entries(csv_content: str) -> bool:
 
     if num_rows != 11:
         valid = False
-        logging.warning(f'Number of rows [{num_rows}] is invalid (expected 11 including header)')
+        logging.warning(f'Number of rows [{num_rows}] is invalid (expected 11 including header) in [{csv_filename}]')
 
     for row in csv_content:
         num_columns = len(row)
         if num_columns != 12:
             valid = False
-            logging.warning(f'Number of columns [{num_columns}] is invalid (expected 12)')
+            logging.warning(f'Number of columns [{num_columns}] is invalid (expected 12) in [{csv_filename}]')
 
     return valid
 
 
-def check_time_entry(csv_content: str) -> bool:
+def check_time_entry(csv_filename: str, csv_content: list) -> bool:
     """
     Takes in csv file name and checks the timestamp value is in form HH:MM:SS
 
     Keyword arguments:
+    csv_content (list) : 2d array of csv file content
     csv_filename (file.csv) : Title of csv file containing data
 
     Returns:
@@ -146,17 +150,18 @@ def check_time_entry(csv_content: str) -> bool:
 
         if x is None:
             valid = False
-            logging.warning(f'Timestamp {x} invalid. Expected format HH:MM:SS')
+            logging.warning(f'Timestamp {x} invalid. Expected format HH:MM:SS in [{csv_filename}]')
 
     return valid
 
 
-def check_headers(csv_content: str) -> bool:
+def check_headers(csv_filename: str, csv_content: list) -> bool:
     """
     Takes in csv file name and returns whether headers are correct
     Expected: batch_id, timestamp, reading1, reading2, reading3, reading4, reading5, reading6, reading7, reading8, reading9, reading10
 
     Keyword arguments:
+    csv_content (list) : 2d array of csv file content
     csv_filename (file.csv) : Title of csv file containing data
 
     Returns:
@@ -177,7 +182,7 @@ def check_headers(csv_content: str) -> bool:
     # check right length
     if len(header_list) != 12:
         valid = False
-        logging.warning('Header is missing. Expected 12 headers')
+        logging.warning('Header is missing. Expected 12 headers in [{csv_filename}]')
 
     # check each name
     if valid:
@@ -188,19 +193,20 @@ def check_headers(csv_content: str) -> bool:
 
     # for logging purposes
     if incorrect_headers != "":
-        logging.warning(f'{incorrect_headers} is incorrect')
+        logging.warning(f'{incorrect_headers} is incorrect in [{csv_filename}]')
 
     return valid
 
 
-def check_invalid_entries(csv_content: str) -> bool:
+def check_invalid_entries(csv_filename: str, csv_content: list) -> bool:
     """
     Takes in csv file name and returns whether entries are valid
     All 10 readings should be represented as floating point numbers formatted up to three decimal places
-    with no value exceeding 9.99
+    with no value exceeding 9.9
 
 
     Keyword arguments:
+    csv_content (list) : 2d array of csv file content
     csv_filename (file.csv) : Title of csv file containing data
 
     Returns:
@@ -219,7 +225,7 @@ def check_invalid_entries(csv_content: str) -> bool:
             #checks number to 3dp
             x = re.search("^\d\.\d{3}$", str_entry)
             if x is None:
-                logging.warning(f'{str_entry} invalid. Expected value to 3dp (Regex failed)')
+                logging.warning(f'{str_entry} invalid. Expected value to 3dp (Regex failed) in [{csv_filename}]')
                 valid = False
                 break
 
@@ -228,16 +234,16 @@ def check_invalid_entries(csv_content: str) -> bool:
                 val = float(str_entry)
                 if val > 9.99:
                     valid = False
-                    logging.warning(f'{str_entry} invalid. Value must not exceed 9.9')
+                    logging.warning(f'{str_entry} invalid. Value must not exceed 9.9 in [{csv_filename}]')
             except:
                 # raises value error as not float
-                logging.warning(f'{str_entry} invalid. Value is not a float')
+                logging.warning(f'{str_entry} invalid. Value is not a float in [{csv_filename}]')
                 valid = False
 
     return valid
 
 
-# ====== Final validation ======
+# ====== New changes ======
 
 def total_valid(csv_filename: str) -> bool:
     """
@@ -255,17 +261,19 @@ def total_valid(csv_filename: str) -> bool:
 
     if valid_filename:
         csv_data = parse_csv_data(csv_filename)
-        non_empty = check_empty_files(csv_data)
+        non_empty = check_empty_files(csv_filename, csv_data)
 
         if non_empty:
 
-            valid_batch_ids = check_batch_ids(csv_data)
-            missing_entry = check_missing_entries(csv_data)
-            time_entry = check_time_entry(csv_data)
-            good_headers = check_headers(csv_data)
-            valid_entires = check_invalid_entries(csv_data)
+            valid_batch_ids = check_batch_ids(csv_filename, csv_data)
+            missing_entry = check_missing_entries(csv_filename, csv_data)
+            time_entry = check_time_entry(csv_filename, csv_data)
+            good_headers = check_headers(csv_filename, csv_data)
+            valid_entires = check_invalid_entries(csv_filename, csv_data)
 
             valid_list = [valid_batch_ids,missing_entry,time_entry,good_headers,valid_entires]
+
+            print(valid_list)
 
             if False in valid_list:
                 valid = False
@@ -280,4 +288,3 @@ def total_valid(csv_filename: str) -> bool:
         valid = False
 
     return valid
-
