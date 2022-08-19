@@ -197,7 +197,7 @@ def check_invalid_entries(csv_content: str) -> bool:
     """
     Takes in csv file name and returns whether entries are valid
     All 10 readings should be represented as floating point numbers formatted up to three decimal places
-    with no value exceeding 9.9
+    with no value exceeding 9.99
 
 
     Keyword arguments:
@@ -226,7 +226,7 @@ def check_invalid_entries(csv_content: str) -> bool:
             try:
                 # checks for float and number
                 val = float(str_entry)
-                if val > 9.9:
+                if val > 9.99:
                     valid = False
                     logging.warning(f'{str_entry} invalid. Value must not exceed 9.9')
             except:
